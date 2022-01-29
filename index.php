@@ -1,5 +1,8 @@
 <?php
-include_once('framework/config/core.php');
+
+include_once('framework/core/Hexagonal.php');
+
+$app = new Hexagonal;
 
 echo "<a href=''" . URL . "''>HexagonalFramework</a>";
 

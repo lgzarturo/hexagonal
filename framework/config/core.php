@@ -80,6 +80,10 @@ ini_set('display_startup_errors', 1);
 
 error_reporting(E_ALL);
 
-include_once(HELPERS . 'custom.php');
+setlocale(LC_ALL, 'en_US.utf8');
 
-include_once(HELPERS . 'functions.php');
+define('HOME_CONTROLLER', 'home');
+
+define('ERROR_CONTROLLER', 'error');
+
+define('DEFAULT_METHOD', 'index');
