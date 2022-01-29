@@ -2,7 +2,7 @@
 
 include_once('framework/core/Hexagonal.php');
 
-$app = new Hexagonal;
+Hexagonal::start();
 
 echo "<a href=''" . URL . "''>HexagonalFramework</a>";
 

@@ -4,15 +4,15 @@ class HomeController
 {
   public function index()
   {
-    echo 'Estamos en index';
+    require_once(LAYOUTS . '/main.php');
   }
 
-  public function hola($nombre)
+  public function hello($name)
   {
-    echo 'Estamos en hola ' . $nombre;
+    require_once(LAYOUTS . '/hello.php');
   }
 
-  public function saludos()
+  public function greetings()
   {
     echo 'Estamos en saludos';
   }

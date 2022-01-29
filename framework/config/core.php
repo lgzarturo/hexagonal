@@ -72,18 +72,18 @@ define('DB_CHARSET', IS_LOCAL ? 'utf8' : '');
 
 define('DB_COLLATION', IS_LOCAL ? 'utf8_general_ci' : '');
 
-date_default_timezone_set(TIMEZONE);
-
-ini_set('display_errors', 1);
-
-ini_set('display_startup_errors', 1);
-
-error_reporting(E_ALL);
-
-setlocale(LC_ALL, 'en_US.utf8');
-
 define('HOME_CONTROLLER', 'home');
 
 define('ERROR_CONTROLLER', 'error');
 
 define('DEFAULT_METHOD', 'index');
+
+ini_set('display_errors', 1);
+
+ini_set('display_startup_errors', 1);
+
+date_default_timezone_set(TIMEZONE);
+
+error_reporting(E_ALL);
+
+setlocale(LC_ALL, 'en_US.utf8');

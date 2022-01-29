@@ -32,7 +32,7 @@ class Hexagonal
 
   private function session()
   {
-    if (!session_start()) {
+    if (session_status() == PHP_SESSION_NONE) {
       session_start();
     }
     return;
@@ -89,7 +89,9 @@ class Hexagonal
     $currentAction = $this->uri[1] ?? 'index';
     $currentAction = str_replace('-', '_', $currentAction);
     $currentController = ucfirst($currentController) . 'Controller';
-    $params = array_values(empty($this->uri[2]) ? [] : array_slice($this->uri, 2));
+    $params = array_values(empty($this->uri[2])
+      ? []
+      : array_slice($this->uri, 2));
     if (!class_exists($currentController)) {
       $currentController = ERROR_CONTROLLER . 'Controller';
       $currentAction = 'not_found';
@@ -104,7 +106,9 @@ class Hexagonal
       //TODO manejar los errores si el método requiere parámetros y no los recibe.
       $controller = new $currentController();
       if (empty($params)) {
-        is_callable([$controller, $currentAction]) ? $controller->$currentAction() : $controller->index();
+        is_callable([$controller, $currentAction])
+          ? $controller->$currentAction()
+          : $controller->index();
         //call_user_func([$controller, $currentAction]);
       } else {
         call_user_func_array([$controller, $currentAction], $params);
@@ -115,5 +119,11 @@ class Hexagonal
       $controller = new $currentController;
       $controller->$currentAction();
     }
+  }
+
+  public static function start()
+  {
+    $app = new self;
+    return;
   }
 }
