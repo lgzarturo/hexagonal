@@ -60,8 +60,9 @@ class Database
     if ($command == 'SELECT') {
       return $query->rowCount() > 0 ? $query->fetchAll(PDO::FETCH_ASSOC) : [];
     } elseif ($command == 'INSERT') {
+      $id = $self->connection->lastInsertId();
       $self->connection->commit();
-      return $self->connection->lastInsertId();
+      return $id;
     } elseif ($command == 'UPDATE') {
       if (strpos($sql, 'WHERE') === false) {
         $self->connection->rollBack();

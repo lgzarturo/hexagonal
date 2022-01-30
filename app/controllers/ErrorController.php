@@ -1,6 +1,6 @@
 <?php
 
-class ErrorController
+class ErrorController extends Controller
 {
   public function index($ex)
   {

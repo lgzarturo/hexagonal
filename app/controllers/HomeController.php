@@ -1,6 +1,6 @@
 <?php
 
-class HomeController
+class HomeController extends Controller
 {
   public function index()
   {
@@ -33,5 +33,18 @@ class HomeController
   {
     echo 'Ejemplo';
     Redirect::to('home/greetings');
+  }
+
+  public function db_test()
+  {
+    $user = new UserModel();
+    $user->id = 9;
+    $user->name = 'Hexagonal_updated';
+    $user->email = 'hexa_updated@gmail.com';
+    $user->username = 'hexa_updated';
+    $user->password = '123456';
+    $count = $user->update();
+    echo 'Registros actualizados: ' . $count;
+    View::render('index');
   }
 }

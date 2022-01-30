@@ -64,9 +64,9 @@ define('DB_PORT', IS_LOCAL ? '3307' : '');
 
 define('DB_NAME', IS_LOCAL ? 'hexagonal' : '');
 
-define('DB_USER', IS_LOCAL ? 'root' : '');
+define('DB_USER', IS_LOCAL ? 'dev' : '');
 
-define('DB_PASS', IS_LOCAL ? 'root' : '');
+define('DB_PASS', IS_LOCAL ? 'MZtnjPMNp#12' : '');
 
 define('DB_CHARSET', IS_LOCAL ? 'utf8' : '');
 
