@@ -60,12 +60,8 @@ class Hexagonal
 
   private function autoload()
   {
-    $this->load_file(CORE, 'Database.php');
-    $this->load_file(CORE, 'Model.php');
-    $this->load_file(CORE, 'Controller.php');
-    $this->load_file(CORE, 'View.php');
-    $this->load_file(CONTROLLERS, HOME_CONTROLLER . 'Controller.php');
-    $this->load_file(CONTROLLERS, ERROR_CONTROLLER . 'Controller.php');
+    $this->load_file(CORE, 'Autoloader.php');
+    Autoloader::init();
     return;
   }
 
@@ -115,6 +111,11 @@ class Hexagonal
     try {
       $controller = new $controllerClass();
       if (empty($params)) {
+        $fct = new ReflectionMethod($controllerClass, $currentAction);
+        $number_of_params = $fct->getNumberOfRequiredParameters();
+        if ($number_of_params > 0) {
+          throw new Exception("Method {$currentAction} of controller {$currentController} requires {$number_of_params} parameters");
+        }
         call_user_func([$controller, $currentAction]);
       } else {
         call_user_func_array([$controller, $currentAction], $params);
