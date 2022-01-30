@@ -6,6 +6,9 @@ class Hexagonal
   private $configPath = 'framework/config/';
   private $version = '1.0.0';
   private $uri = [];
+  private $controllerSuffix = 'Controller';
+  private $defaultAction = 'index';
+  private $notFoundAction = 'not_found';
 
   function __construct()
   {
@@ -80,7 +83,7 @@ class Hexagonal
       $uri = mb_strtolower($uri, 'UTF-8');
       $uri = filter_var($uri, FILTER_SANITIZE_URL);
       if (empty($uri)) {
-        $uri = '404';
+        $uri = $this->notFoundAction;
       }
       $this->uri = explode('/', $uri);
       return $this->uri;
@@ -91,21 +94,21 @@ class Hexagonal
   {
     $this->handle_uri();
     $currentController = $this->uri[0] ?? HOME_CONTROLLER;
-    $currentAction = $this->uri[1] ?? 'index';
+    $currentAction = $this->uri[1] ?? $this->defaultAction;
     $currentAction = str_replace('-', '_', $currentAction);
     $params = array_values(empty($this->uri[2])
       ? []
       : array_slice($this->uri, 2));
-    $controllerClass = ucfirst($currentController) . 'Controller';
+    $controllerClass = ucfirst($currentController) . $this->controllerSuffix;
     if (!class_exists($controllerClass)) {
       $currentController = ERROR_CONTROLLER;
-      $currentAction = 'not_found';
-      $controllerClass = ucfirst($currentController) . 'Controller';
+      $currentAction = $this->notFoundAction;
+      $controllerClass = ucfirst($currentController) . $this->controllerSuffix;
     }
     if (!method_exists($controllerClass, $currentAction)) {
       $currentController = ERROR_CONTROLLER;
-      $currentAction = 'not_found';
-      $controllerClass = ucfirst($currentController) . 'Controller';
+      $currentAction = $this->notFoundAction;
+      $controllerClass = ucfirst($currentController) . $this->controllerSuffix;
     }
     define('CONTROLLER', $currentController);
     define('METHOD', $currentAction);
@@ -117,10 +120,10 @@ class Hexagonal
         call_user_func_array([$controller, $currentAction], $params);
       }
     } catch (Exception $ex) {
-      $currentAction = 'index';
+      $currentAction = $this->defaultAction;
       $currentController = ERROR_CONTROLLER;
       define('CONTROLLER_ERROR', $currentController);
-      $controllerClass = ucfirst($currentController) . 'Controller';
+      $controllerClass = ucfirst($currentController) . $this->controllerSuffix;
       $controller = new $controllerClass;
       call_user_func_array([$controller, $currentAction], [$ex]);
     }
