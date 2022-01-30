@@ -20,4 +20,10 @@ class HomeController
     ];
     View::render('greetings', $data);
   }
+
+  public function test()
+  {
+    echo 'Ejemplo';
+    Redirect::to('home/greetings');
+  }
 }
