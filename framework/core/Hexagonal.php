@@ -21,6 +21,7 @@ class Hexagonal
     $this->config();
     $this->functions();
     $this->autoload();
+    $this->security();
     $this->dispatch();
   }
 
@@ -43,6 +44,11 @@ class Hexagonal
       session_start();
     }
     return;
+  }
+
+  private function security()
+  {
+    $csrf = new Security();
   }
 
   private function config()

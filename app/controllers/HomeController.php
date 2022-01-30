@@ -37,14 +37,13 @@ class HomeController extends Controller
 
   public function db_test()
   {
-    $user = new UserModel();
-    $user->id = 9;
-    $user->name = 'Hexagonal_updated';
-    $user->email = 'hexa_updated@gmail.com';
-    $user->username = 'hexa_updated';
-    $user->password = '123456';
-    $count = $user->update();
-    echo 'Registros actualizados: ' . $count;
+    print_r($_SESSION);
+    $token = "846e9d23854273e70b0f791fa35bc372b30bf41ccb7cea627346d031931435b3";
+    if (Security::csrf_validate_token($token)) {
+      echo 'Token valido';
+    } else {
+      echo 'Error al validar el token';
+    }
     View::render('index');
   }
 }
