@@ -6,7 +6,8 @@ class View
   public static function render($view_name, $data = [])
   {
     $context = to_object($data);
-    $view_path = VIEWS . CONTROLLER . DS . $view_name . '.php';
+    $controller = defined('CONTROLLER_ERROR') ? CONTROLLER_ERROR : CONTROLLER;
+    $view_path = VIEWS . $controller . DS . $view_name . '.php';
     if (!is_file($view_path)) {
       throw new Exception("View '{$view_path}' not found");
     }

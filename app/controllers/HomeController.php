@@ -4,7 +4,7 @@ class HomeController
 {
   public function index()
   {
-    require_once(LAYOUTS . '/main.php');
+    View::render('index');
   }
 
   public function hello($name)

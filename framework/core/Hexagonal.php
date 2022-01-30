@@ -35,8 +35,8 @@ class Hexagonal
     if (session_status() == PHP_SESSION_NONE) {
       define('SESSION_STARTED', true);
       define('FRAMEWORK_NAME', $this->framework);
+      define('FRAMEWORK_VERSION', $this->version);
       define('VERSION_PHP', phpversion());
-      define('VERSION_HEXAGONAL', $this->version);
       session_start();
     }
     return;
@@ -93,24 +93,24 @@ class Hexagonal
     $currentController = $this->uri[0] ?? HOME_CONTROLLER;
     $currentAction = $this->uri[1] ?? 'index';
     $currentAction = str_replace('-', '_', $currentAction);
-    define('CONTROLLER', $currentController);
-    define('METHOD', $currentAction);
-    $currentController = ucfirst($currentController) . 'Controller';
     $params = array_values(empty($this->uri[2])
       ? []
       : array_slice($this->uri, 2));
-    if (!class_exists($currentController)) {
-      $currentController = ERROR_CONTROLLER . 'Controller';
+    $controllerClass = ucfirst($currentController) . 'Controller';
+    if (!class_exists($controllerClass)) {
+      $currentController = ERROR_CONTROLLER;
       $currentAction = 'not_found';
+      $controllerClass = ucfirst($currentController) . 'Controller';
     }
-
-    if (!method_exists($currentController, $currentAction)) {
-      $currentController = ERROR_CONTROLLER . 'Controller';
+    if (!method_exists($controllerClass, $currentAction)) {
+      $currentController = ERROR_CONTROLLER;
       $currentAction = 'not_found';
+      $controllerClass = ucfirst($currentController) . 'Controller';
     }
-
+    define('CONTROLLER', $currentController);
+    define('METHOD', $currentAction);
     try {
-      $controller = new $currentController();
+      $controller = new $controllerClass();
       if (empty($params)) {
         call_user_func([$controller, $currentAction]);
       } else {
@@ -118,8 +118,10 @@ class Hexagonal
       }
     } catch (Exception $ex) {
       $currentAction = 'index';
-      $currentController = ERROR_CONTROLLER . 'Controller';
-      $controller = new $currentController;
+      $currentController = ERROR_CONTROLLER;
+      define('CONTROLLER_ERROR', $currentController);
+      $controllerClass = ucfirst($currentController) . 'Controller';
+      $controller = new $controllerClass;
       call_user_func_array([$controller, $currentAction], [$ex]);
     }
   }
