@@ -21,6 +21,13 @@ class Security
     }
     $this->csrf_token_value = $_SESSION[$this->csrf_token_name]['token'];
     $this->csrf_token_expire = $_SESSION[$this->csrf_token_name]['expire'];
+    if ($this->csrf_token_expire < time()) {
+      $this->csrf_generate_token();
+      $_SESSION[$this->csrf_token_name] = [
+        'token' => $this->csrf_token_value,
+        'expire' => $this->csrf_token_expire
+      ];
+    }
     return $this;
   }
 
@@ -32,7 +39,6 @@ class Security
       $this->csrf_token_value = random_bytes(openssl_random_pseudo_bytes($this->csrf_token_length));
     }
     $this->csrf_token_expire = time() + $this->expiration_time;
-    //setcookie($this->csrf_token_name, $this->csrf_token_value, $this->csrf_token_expire, '/');
     return $this;
   }
 
