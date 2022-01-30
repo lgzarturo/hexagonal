@@ -21,7 +21,7 @@ class Hexagonal
     $this->dispatch();
   }
 
-  private function loadFile($path, $file)
+  private function load_file($path, $file)
   {
     if (!is_file($path . $file)) {
       die(sprintf('%s - Critical Error: The file %s does not exist', $this->framework, $file));
@@ -33,6 +33,10 @@ class Hexagonal
   private function session()
   {
     if (session_status() == PHP_SESSION_NONE) {
+      define('SESSION_STARTED', true);
+      define('FRAMEWORK_NAME', $this->framework);
+      define('VERSION_PHP', phpversion());
+      define('VERSION_HEXAGONAL', $this->version);
       session_start();
     }
     return;
@@ -40,28 +44,29 @@ class Hexagonal
 
   private function config()
   {
-    $this->loadFile($this->configPath, 'core.php');
+    $this->load_file($this->configPath, 'core.php');
     return;
   }
 
   private function functions()
   {
-    $this->loadFile(HELPERS, 'custom.php');
-    $this->loadFile(HELPERS, 'functions.php');
+    $this->load_file(HELPERS, 'custom.php');
+    $this->load_file(HELPERS, 'functions.php');
     return;
   }
 
   private function autoload()
   {
-    $this->loadFile(CORE, 'Database.php');
-    $this->loadFile(CORE, 'Model.php');
-    $this->loadFile(CORE, 'Controller.php');
-    $this->loadFile(CONTROLLERS, HOME_CONTROLLER . 'Controller.php');
-    $this->loadFile(CONTROLLERS, ERROR_CONTROLLER . 'Controller.php');
+    $this->load_file(CORE, 'Database.php');
+    $this->load_file(CORE, 'Model.php');
+    $this->load_file(CORE, 'Controller.php');
+    $this->load_file(CORE, 'View.php');
+    $this->load_file(CONTROLLERS, HOME_CONTROLLER . 'Controller.php');
+    $this->load_file(CONTROLLERS, ERROR_CONTROLLER . 'Controller.php');
     return;
   }
 
-  private function handleUri()
+  private function handle_uri()
   {
     if (isset($_GET['uri'])) {
       $uri = $_GET['uri'];
@@ -84,10 +89,12 @@ class Hexagonal
 
   function dispatch()
   {
-    $this->handleUri();
+    $this->handle_uri();
     $currentController = $this->uri[0] ?? HOME_CONTROLLER;
     $currentAction = $this->uri[1] ?? 'index';
     $currentAction = str_replace('-', '_', $currentAction);
+    define('CONTROLLER', $currentController);
+    define('METHOD', $currentAction);
     $currentController = ucfirst($currentController) . 'Controller';
     $params = array_values(empty($this->uri[2])
       ? []
@@ -103,13 +110,9 @@ class Hexagonal
     }
 
     try {
-      //TODO manejar los errores si el método requiere parámetros y no los recibe.
       $controller = new $currentController();
       if (empty($params)) {
-        is_callable([$controller, $currentAction])
-          ? $controller->$currentAction()
-          : $controller->index();
-        //call_user_func([$controller, $currentAction]);
+        call_user_func([$controller, $currentAction]);
       } else {
         call_user_func_array([$controller, $currentAction], $params);
       }
@@ -117,13 +120,12 @@ class Hexagonal
       $currentAction = 'index';
       $currentController = ERROR_CONTROLLER . 'Controller';
       $controller = new $currentController;
-      $controller->$currentAction();
+      call_user_func_array([$controller, $currentAction], [$ex]);
     }
   }
 
   public static function start()
   {
-    $app = new self;
-    return;
+    return new self;
   }
 }

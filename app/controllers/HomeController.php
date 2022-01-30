@@ -14,6 +14,10 @@ class HomeController
 
   public function greetings()
   {
-    echo 'Estamos en saludos';
+    $data = [
+      'id' => 1,
+      'name' => 'Hexagonal'
+    ];
+    View::render('greetings', $data);
   }
 }

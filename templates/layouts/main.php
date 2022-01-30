@@ -10,6 +10,12 @@
 
 <body>
   <h1>Hola mundo</h1>
+  <ul>
+    <li><?php echo CONTROLLER ?>@<?php echo METHOD ?></li>
+    <li><?php echo SESSION_STARTED == 1 ? 'Con sesión' : 'Sin sesión'  ?></li>
+    <li><?php echo FRAMEWORK_NAME ?> v<?php echo VERSION_HEXAGONAL ?></li>
+    <li>PHP v<?php echo VERSION_PHP ?></li>
+  </ul>
 </body>
 
 </html>
