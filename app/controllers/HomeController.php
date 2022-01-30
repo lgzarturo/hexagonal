@@ -18,6 +18,14 @@ class HomeController
       'id' => 1,
       'name' => 'Hexagonal'
     ];
+    $messages = [
+      'Mensaje 1',
+      'Mensaje 2',
+      'Mensaje 3'
+    ];
+    Message::set($messages, 'success');
+    Message::set('Informar al usuario');
+
     View::render('greetings', $data);
   }
 
