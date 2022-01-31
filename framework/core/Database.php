@@ -9,7 +9,6 @@ class Database
   private $db_user;
   private $db_password;
   private $charset;
-
   private $connection;
 
   public function __construct()
@@ -20,9 +19,9 @@ class Database
     $this->db_user = DB_USER;
     $this->db_password = DB_PASS;
     $this->charset = DB_CHARSET;
-    $this->uri = DB_ENGINE . ':host=' . DB_HOST;
-    $this->uri .= ';dbname=' . DB_NAME;
-    $this->uri .= ';charset=' . DB_CHARSET;
+    $this->uri = $this->engine . ':host=' . $this->db_host;
+    $this->uri .= ';dbname=' . $this->db_name;
+    $this->uri .= ';charset=' . $this->charset;
     $this->connect();
     return $this;
   }

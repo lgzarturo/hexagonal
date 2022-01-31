@@ -1,3 +1,3 @@
 <h1>
-  Hola <?php echo $name ?>
+  Hello <?php echo $name ?>
 </h1>

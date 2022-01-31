@@ -5,7 +5,7 @@ function to_object($array)
   return json_decode(json_encode($array));
 }
 
-function get_alerts($class = 'alert', $closable = true, $icon = 'alert')
+function get_alerts($class = 'alert')
 {
   $messages = Message::get();
   if (empty($messages)) {
