@@ -53,6 +53,7 @@ class Hexagonal
 
   private function config()
   {
+    $this->load_file($this->configPath, 'DotEnv.php');
     $this->load_file($this->configPath, 'core.php');
     return;
   }
