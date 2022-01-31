@@ -17,7 +17,7 @@ Tecnologías:
 
 Crear el archivo .env con las siguientes variables:
 
-'''properties
+```env
 TIMEZONE=America/Cancun
 LANGUAGE=es
 APP_SALT=HexagonalFramework
@@ -29,6 +29,6 @@ DB_USER={{ database_user }}
 DB_PASS={{ database_password }}
 DB_CHARSET=utf8
 DB_COLLATION=utf8_general_ci
-'''
+```
 
 >> Plantilla de ejemplo: .envSample
